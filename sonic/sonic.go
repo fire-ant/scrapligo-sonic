@@ -14,27 +14,38 @@ func NewSonicDriver(
 	defaultPrivilegeLevels := map[string]*base.PrivilegeLevel{
 		"exec": {
 			Pattern:        `(?im)^[\w\._-]+@[\w\.\(\)_-]+>\s?`,
-			Name:           execPrivLevel,
+			Name:           "linux,
 			PreviousPriv:   "",
-			Deescalate:         "disable",
-			Escalate:           "enable",
+			Deescalate:         "",
+			Escalate:           "sudo",
 			EscalateAuth:       true,
 			EscalatePrompt:     `(?im)^[pP]assword:\s?$`,
 		},
+		"cli": {
+			Pattern:        `(?im)^\S+@\S+\:\S+[\#\?]\s*$`,
+			Name:           "cli",
+			PreviousPriv:   "linux",
+			Deescalate:     "",
+			Escalate:       "sonic-cli",
+			EscalateAuth:   false,
+			EscalatePrompt: "",
+		},
 		"configuration": {
-			Pattern:        `(?im)^[\w\._-]+@[\w\.\(\)_-]+#\s?$`,
-			Name:           configPrivLevel,
-			PreviousPriv:   execPrivLevel,
-			Deescalate:     "exit",
-			Escalate:       "configure",
+			Pattern:        `(?im)^[\w.\-@/:]{1,63}\([\w.\-@/:+]{0,32}\)#\s*$`,
+			Name:           "configuration",
+			PreviousPriv:   "cli",
+			Deescalate:     "end",
+			Escalate:       "configure terminal",
 			EscalateAuth:   false,
 			EscalatePrompt: "",
 		},
 	}
+
 	defaultFailedWhenContains := []string{
-		"Unknown command:",
-		"Invalid Syntax.",
-		"Validation Error:",
+		"% Ambiguous command",
+		"% Incomplete command",
+		"% Invalid input detected",
+		"% Unknown command",
 	}
 
 	const defaultDefaultDesiredPriv = execPrivLevel
