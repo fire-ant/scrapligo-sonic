@@ -48,7 +48,7 @@ func NewSonicDriver(
 		"% Unknown command",
 	}
 
-	const defaultDefaultDesiredPriv = execPrivLevel
+	const defaultDefaultDesiredPriv =  "exec"
 
 	d, err := network.NewNetworkDriver(
 		host,
