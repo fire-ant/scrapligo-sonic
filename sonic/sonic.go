@@ -14,7 +14,7 @@ func NewSonicDriver(
 	defaultPrivilegeLevels := map[string]*base.PrivilegeLevel{
 		"exec": {
 			Pattern:        `(?im)^[\w\._-]+@[\w\.\(\)_-]+>\s?`,
-			Name:           "linux,
+			Name:           "linux",
 			PreviousPriv:   "",
 			Deescalate:         "",
 			Escalate:           "sudo",
